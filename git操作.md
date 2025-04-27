@@ -116,6 +116,104 @@
 
 **git log用于查看提交历史**
 
-   
+## 推送远端仓库
 
-   
+**在使用git commit命令将自己的修改从暂存区提交到本地版本库后，可以使用git push将本地版本库的分支推送到远程服务器上对应的分支**
+
+**window操作系统git分支名大小写不敏感**
+
+```shell
+git push origin branch_name
+该语句将本地分支branch_name的内容用于更新远程分支的branch_name
+```
+
+```shell
+git push origin branch_name:new_branch_name
+该语句将本地分支branch_name 保存为远端上新建分支new_branch_name（注意:之间不能有空格）
+```
+
+## 分支管理
+
+**git branch命令即可查看本地工程的所有git分支名称**
+
+```shell
+yjw@yjwPc MINGW64 /e/yjw/study/C++/test/leetcode (myBranch)
+$ git branch
+  main
+* myBranch
+  new_myBranch
+其中带*的即为当前激活的分支
+```
+
+**使用git branch -r查看远端服务器上所拥有的分支，返回的分支名带origin前缀，表示在远端**
+
+```shell
+yjw@yjwPc MINGW64 /e/yjw/study/C++/test/leetcode (myBranch)
+$ git branch -r
+  origin/HEAD -> origin/main
+  origin/main
+  origin/newMyBranch
+```
+
+**如果想查看远端服务器和本地工程所有的分支，那么执行git branch -a即可**
+
+git branch 和 git checkout -b -的异同
+
+**相同点：**
+
+git branch 和git checkout -b都可以用于新建分支（默认基于当前分支节点创建）   
+
+**区别点：**
+
+git branch 新建分支后并不会切换到新分支
+
+git checkout -b新建分支后会自动切换到新分支
+
+常见的新建分支命令格式
+
+```shell
+git branch new_branch_name
+or 
+git checkout -b branch_name
+```
+
+**删除本地分支**
+
+git branch -d branch_name和git branch -D branch_name都可以用来删除本地分支，后者大写代表强制删除
+
+**删除远程分支**
+
+```shell
+git branch -d -r branch_name
+其中branch_name为本地分支名
+删除后还要推送到服务器上才行
+git push origin:branch_name
+```
+
+**使用git checkout切换分支**
+
+有时候，当前分支工作区存在修改而未提交的文件，与目的分支上的内容冲突，会导致checkout切换失败，这时候，可以使用git checktout -f 进行强制切换。
+
+**常用的切换分支命令格式：git checkout branch_name**
+
+### 更新
+
+**使用git pull从远端服务器获取某个分支的更新，在于本地指定的分支进行自动合并**
+
+```shell
+git pull origin remote_branch:local_branch
+如果远程指定的分支与本地指定的分支相同，则可以直接执行
+git pull origin remote_branch
+```
+
+**git fetch的作用是，从远端服务器中获取某个分支的更新到本地仓库。注意，与git pull不同，git fetch在获取到更新后，并不会进行合并（即git merge操作），这样能留给用户一个操作空间，确认git fetch内容符合预期之后，再决定是否手动合并节点。**
+
+```shell
+常用的获取远端分支更新命令格式：
+git fetch origin remote_branch:local_branch
+如果远程指定的分支与本地指定的分支相同，则可直接执行
+git fetch origin remote_branch
+```
+
+
+
