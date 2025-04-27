@@ -213,7 +213,11 @@ git pull origin remote_branch
 git fetch origin remote_branch:local_branch
 如果远程指定的分支与本地指定的分支相同，则可直接执行
 git fetch origin remote_branch
+
+不能在当前分支内执行对当前分支的更新操作
 ```
+
+### 分支合并
 
 
 
