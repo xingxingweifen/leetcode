@@ -42,7 +42,7 @@
 
    ```shell
    git diff main myBranch
-   //输出
+   # 输出
    diff --git "a/git\346\223\215\344\275\234.md" "b/git\346\223\215\344\275\234.md"
    new file mode 100644
    index 0000000..15740ad
@@ -184,10 +184,12 @@ git branch -d branch_name和git branch -D branch_name都可以用来删除本地
 **删除远程分支**
 
 ```shell
-git branch -d -r branch_name
+git branch -d -r branch_name（远程分支应当写完整像origin/newMyBranch）
 其中branch_name为本地分支名
 删除后还要推送到服务器上才行
-git push origin:branch_name
+git push origin :branch_name（需要注意origin后面有一个空格）
+or
+git push origin --delete oldBranch # 推荐方式
 ```
 
 **使用git checkout切换分支**
