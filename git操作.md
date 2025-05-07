@@ -14,13 +14,13 @@
    - **git lfs专门针对二进制文件进行区别管理，若克隆项目中具有二进制文件则应务必使用git lfs clone。否则克隆操作无法下载到工程中的二进制文件，工程内容不完整**
 
 ## 新增/删除/移动文件到暂存区
-1. **在提交修改的文件之前，需要使用git add 将该文件添加到暂存区**
+1. **在提交修改的文件之前，需要使用git add 将该文件添加到暂存区，git add . or git add -all添加所有新增文件**  
 
-2. **git rm将指定文件彻底从当前分支的缓存区删除，因此它从当前分支的下一个提交快照中被删除。**
+2. **git rm将指定文件彻底从当前分支的缓存区删除，因此它从当前分支的下一个提交快照中被删除。**  
 
-3. **git mv命令用于移动文件，也可以用于重命名文件**
+3. **git mv命令用于移动文件，也可以用于重命名文件**  
 
-   例1：需要将文件codehunter_nginx.conf从当前目录移动到config目录下，可以执行：
+   例1：需要将文件codehunter_nginx.conf从当前目录移动到config目录下，可以执行：  
 
    ```shell
    git mv codehunter_nginx.conf config
@@ -108,13 +108,14 @@
    git commit yourFile_name -m "commit message"
    or
    git commit -am "commit message"
+   git commit -amend # 可以修改最近一次提交的描述
    ```
 
    提交成功之后，git日志可查到此次提交的id和提交的描述信息。
 
 ## 查看日志
 
-**git log用于查看提交历史**
+**git log用于查看提交历史**可以加上--name--status查看对应的文件名和其状态
 
 ## 推送远端仓库
 
@@ -223,7 +224,7 @@ git fetch origin remote_branch
 **git merge命令是指从指定的分支（节点）合并到当前分支的操作**
 常用的命令格式为：
 ```shell
-git merge branch_name  # 意味着将分支branch_name合并到当前分支上。
+git merge branch_name  # 意味着将分支branch_name合并到当前分支上，形成新的节点，同时对历史的节点无影响。
 ```
 
 **git rebase也是用于合并目标分支内容到当前分支**（与git merge并不完全相同）
@@ -240,4 +241,11 @@ git reset --soft commit_id # 若直接使用该命令会保留工作区的修改
 git reset --hard commit_id # 若想彻底丢弃修改需使用这条命令，会永久删除未提交的改动。
 ```
 
-**git checkout .**用于回退本地所有修改而未提交的文件内容。
+**git checkout .** 用于回退本地所有修改而未提交的文件内容。  
+**git checkout .** 是一条有风险的命令，因为它会取消本地工作区的修改（相对于暂存区），用暂存区的所有文件直接覆盖本地文件，达到回退内容的目的。但它不给用户任何确认机会，**所以谨慎使用**。  
+常用的回退命令格式为：
+```shell
+git checkout .
+git checkout -filename # 仅仅回退某个文件的未提交改动
+git checkout commit_id # 将工具区回退（检出）到某个提交版本。 更接近git reset --hard 但是更加安全（若工作区有未提交的改动，checkout会拒绝切除/除非添加-f强制）。
+```
