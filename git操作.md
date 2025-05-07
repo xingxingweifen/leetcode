@@ -236,5 +236,8 @@ git rebase branch_name
 ### 撤销操作
 **git reset**通常用于撤销当前工作区中的某些**git add/commit**操作，可将工作区内容回退到历史提交节点。常用的工作区回退命令格式为:
 ```shell
-git reset commit_id
+git reset --soft commit_id # 若直接使用该命令会保留工作区的修改，即文件改动还在但会从暂存区移除。(default --soft)
+git reset --hard commit_id # 若想彻底丢弃修改需使用这条命令，会永久删除未提交的改动。
 ```
+
+**git checkout .**用于回退本地所有修改而未提交的文件内容。
