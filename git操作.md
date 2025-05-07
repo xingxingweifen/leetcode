@@ -220,6 +220,21 @@ git fetch origin remote_branch
 ```
 
 ### 分支合并
+**git merge命令是指从指定的分支（节点）合并到当前分支的操作**
+常用的命令格式为：
+```shell
+git merge branch_name  # 意味着将分支branch_name合并到当前分支上。
+```
 
+**git rebase也是用于合并目标分支内容到当前分支**（与git merge并不完全相同）
 
+常用命令格式：
 
+```shell
+git rebase branch_name
+```
+### 撤销操作
+**git reset**通常用于撤销当前工作区中的某些**git add/commit**操作，可将工作区内容回退到历史提交节点。常用的工作区回退命令格式为:
+```shell
+git reset commit_id
+```
