@@ -249,3 +249,35 @@ git checkout .
 git checkout -filename # 仅仅回退某个文件的未提交改动
 git checkout commit_id # 将工具区回退（检出）到某个提交版本。 更接近git reset --hard 但是更加安全（若工作区有未提交的改动，checkout会拒绝切除/除非添加-f强制）。
 ```
+### git密钥
+1. 在git bash命令行工具中输入如下命令
+```shell
+cd ~/.ssh
+```
+此时输入ls命令会得到如下输出
+```shell
+yjw@yjwPc MINGW64 ~/.ssh
+$ ls
+authorized_keys  id_huawei      id_rsa      known_hosts
+config           id_huawei.pub  id_rsa.pub  known_hosts.old
+# 其中id_rsa是github的私钥，id_rsa.pub是需要上传到github上的公钥
+# 同理id_huawei是华为云代码托管的私钥，id_huawei.pub是需要上传到华为云上的公钥
+```
+2. 生成私钥的命令为
+```shell
+ssh-keygen -t rsa -C "huawei@example.com" -f ~/.ssh/id_huawei
+```
+3. 将公钥粘贴到网站上
+```shell
+cat ~/.ssh/id_huawei.pub
+```
+**为了让git自动区分Github和华为云的密钥可以在在 ~/.ssh/config 文件中添加规则**
+```shell
+# GitHub
+Host github.com
+  IdentityFile ~/.ssh/id_rsa
+
+# 华为云
+Host codehub.cn
+  IdentityFile ~/.ssh/id_huawei
+```
