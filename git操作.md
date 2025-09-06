@@ -14,13 +14,13 @@
    - **git lfs专门针对二进制文件进行区别管理，若克隆项目中具有二进制文件则应务必使用git lfs clone。否则克隆操作无法下载到工程中的二进制文件，工程内容不完整**
 
 ## 新增/删除/移动文件到暂存区
-1. **在提交修改的文件之前，需要使用git add 将该文件添加到暂存区**
+1. **在提交修改的文件之前，需要使用git add 将该文件添加到暂存区，git add . or git add -all添加所有新增文件**  
 
-2. **git rm将指定文件彻底从当前分支的缓存区删除，因此它从当前分支的下一个提交快照中被删除。**
+2. **git rm将指定文件彻底从当前分支的缓存区删除，因此它从当前分支的下一个提交快照中被删除。**  
 
-3. **git mv命令用于移动文件，也可以用于重命名文件**
+3. **git mv命令用于移动文件，也可以用于重命名文件**  
 
-   例1：需要将文件codehunter_nginx.conf从当前目录移动到config目录下，可以执行：
+   例1：需要将文件codehunter_nginx.conf从当前目录移动到config目录下，可以执行：  
 
    ```shell
    git mv codehunter_nginx.conf config
@@ -42,7 +42,7 @@
 
    ```shell
    git diff main myBranch
-   //输出
+   # 输出
    diff --git "a/git\346\223\215\344\275\234.md" "b/git\346\223\215\344\275\234.md"
    new file mode 100644
    index 0000000..15740ad
@@ -108,13 +108,14 @@
    git commit yourFile_name -m "commit message"
    or
    git commit -am "commit message"
+   git commit -amend # 可以修改最近一次提交的描述
    ```
 
    提交成功之后，git日志可查到此次提交的id和提交的描述信息。
 
 ## 查看日志
 
-**git log用于查看提交历史**
+**git log用于查看提交历史**可以加上--name--status查看对应的文件名和其状态
 
 ## 推送远端仓库
 
@@ -184,10 +185,12 @@ git branch -d branch_name和git branch -D branch_name都可以用来删除本地
 **删除远程分支**
 
 ```shell
-git branch -d -r branch_name
+git branch -d -r branch_name（远程分支应当写完整像origin/newMyBranch）
 其中branch_name为本地分支名
 删除后还要推送到服务器上才行
-git push origin:branch_name
+git push origin :branch_name（需要注意origin后面有一个空格）
+or
+git push origin --delete oldBranch # 推荐方式
 ```
 
 **使用git checkout切换分支**
@@ -213,7 +216,68 @@ git pull origin remote_branch
 git fetch origin remote_branch:local_branch
 如果远程指定的分支与本地指定的分支相同，则可直接执行
 git fetch origin remote_branch
+
+不能在当前分支内执行对当前分支的更新操作
 ```
 
+### 分支合并
+**git merge命令是指从指定的分支（节点）合并到当前分支的操作**
+常用的命令格式为：
+```shell
+git merge branch_name  # 意味着将分支branch_name合并到当前分支上，形成新的节点，同时对历史的节点无影响。
+```
 
+**git rebase也是用于合并目标分支内容到当前分支**（与git merge并不完全相同）
 
+常用命令格式：
+
+```shell
+git rebase branch_name
+```
+### 撤销操作
+**git reset**通常用于撤销当前工作区中的某些**git add/commit**操作，可将工作区内容回退到历史提交节点。常用的工作区回退命令格式为:
+```shell
+git reset --soft commit_id # 若直接使用该命令会保留工作区的修改，即文件改动还在但会从暂存区移除。(default --soft)
+git reset --hard commit_id # 若想彻底丢弃修改需使用这条命令，会永久删除未提交的改动。
+```
+
+**git checkout .** 用于回退本地所有修改而未提交的文件内容。  
+**git checkout .** 是一条有风险的命令，因为它会取消本地工作区的修改（相对于暂存区），用暂存区的所有文件直接覆盖本地文件，达到回退内容的目的。但它不给用户任何确认机会，**所以谨慎使用**。  
+常用的回退命令格式为：
+```shell
+git checkout .
+git checkout -filename # 仅仅回退某个文件的未提交改动
+git checkout commit_id # 将工具区回退（检出）到某个提交版本。 更接近git reset --hard 但是更加安全（若工作区有未提交的改动，checkout会拒绝切除/除非添加-f强制）。
+```
+### git密钥
+1. 在git bash命令行工具中输入如下命令
+```shell
+cd ~/.ssh
+```
+此时输入ls命令会得到如下输出
+```shell
+yjw@yjwPc MINGW64 ~/.ssh
+$ ls
+authorized_keys  id_huawei      id_rsa      known_hosts
+config           id_huawei.pub  id_rsa.pub  known_hosts.old
+# 其中id_rsa是github的私钥，id_rsa.pub是需要上传到github上的公钥
+# 同理id_huawei是华为云代码托管的私钥，id_huawei.pub是需要上传到华为云上的公钥
+```
+2. 生成私钥的命令为
+```shell
+ssh-keygen -t rsa -C "huawei@example.com" -f ~/.ssh/id_huawei
+```
+3. 将公钥粘贴到网站上
+```shell
+cat ~/.ssh/id_huawei.pub
+```
+**为了让git自动区分Github和华为云的密钥可以在在 ~/.ssh/config 文件中添加规则**
+```shell
+# GitHub
+Host github.com
+  IdentityFile ~/.ssh/id_rsa
+
+# 华为云
+Host codehub.cn
+  IdentityFile ~/.ssh/id_huawei
+```
